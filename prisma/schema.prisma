@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum GameStatus {
+  BACKLOG
+  PLAYING
+  COMPLETED
+  DROPPED
+}
+
+enum Platform {
+  PC
+  PLAYSTATION
+  XBOX
+  NINTENDO
+  MOBILE
+  OTHER
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  password     String
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  
+  userGames    UserGame[]
+  reviews  Review[]
+  
+  @@index([email])
+}
+
+model Game {
+  id            String     @id @default(cuid())
+  externalId    String?    @unique
+  title         String
+  description   String?
+  coverUrl      String?
+  genres        String[]
+  platforms     Platform[]
+  releaseYear   Int?
+  developer     String?
+  publisher     String?
+  averageRating Float?
+  ratingsCount  Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  
+  userGames     UserGame[]
+  reviews       Review[]
+  
+  @@index([title])
+  @@index([externalId])
+}
+
+model UserGame {
+  id          String      @id @default(cuid())
+  status      GameStatus  @default(BACKLOG)
+  rating      Int?
+  hoursPlayed Float?      @default(0)
+  notes       String?
+  startedAt   DateTime?
+  completedAt DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+
+
+  gameId      String
+  game        Game        @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, gameId])
+  @@index([userId])
+  @@index([gameId])
+  @@index([status])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  content   String
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  gameId    String
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, gameId])
+  @@index([userId])
+  @@index([gameId])
+}
