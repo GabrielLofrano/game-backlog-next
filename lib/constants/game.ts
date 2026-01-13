@@ -1,4 +1,4 @@
-import { GameStatus, Platform } from "@/lib/generated/prisma";
+import { GameStatus, Platform } from "@prisma/client";
 
 export const GAME_STATUS_LABELS: Record<GameStatus, string> = {
   BACKLOG: "Backlog",

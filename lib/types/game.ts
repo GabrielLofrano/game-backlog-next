@@ -1,10 +1,4 @@
-import {
-  Game,
-  UserGame,
-  Review,
-  GameStatus,
-  Platform,
-} from "../../lib/generated/prisma/client";
+import { Game, UserGame, Review, GameStatus, Platform } from "@prisma/client";
 
 export type { Game, UserGame, Review, GameStatus, Platform };
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "../prisma";
-import { GameStatus, Platform } from "../../lib/generated/prisma";
+import { GameStatus, Platform } from "@prisma/client";
 import type { GameFilters, GameStats } from "../types/game";
 
 export class GameService {
